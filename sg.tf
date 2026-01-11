@@ -7,10 +7,11 @@ resource "aws_security_group" "wordpress_sg" {
   description = "Allow HTTP, HTTPS and SSH traffic"
   vpc_id      = data.aws_vpc.default.id
 
+
   # HTTP access from anywhere
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 8000
+    to_port     = 8000
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -28,7 +29,7 @@ resource "aws_security_group" "wordpress_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["79.177.129.158/32"]
+    cidr_blocks = ["147.235.180.110/32", "18.206.107.24/29"] # the first is my ip, the second is the aws range ips to connect through the session manager
   }
 
   # Outbound Rules: Allow the server to talk to the internet 
