@@ -11,4 +11,7 @@ apt-cache policy docker-ce
 sudo apt install docker-ce docker-ce-cli containerd.io -y
 docker --version
 
+sudo apt install docker-compose -y
+docker-compose --version
+
 echo "User data script execution completed."
