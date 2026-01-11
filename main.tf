@@ -18,6 +18,8 @@ resource "aws_instance" "app_server" {
   instance_type          = "t2.micro"
   vpc_security_group_ids = [aws_security_group.wordpress_sg.id]
 
+  user_data = "${file("main.sh")}\n${file("docker.sh")}"
+
   tags = {
     Name = "learn-terraform"
   }
