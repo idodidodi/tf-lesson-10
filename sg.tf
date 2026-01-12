@@ -24,12 +24,20 @@ resource "aws_security_group" "wordpress_sg" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  # SSH access (Restrict this to your IP for better security!)
+  # SSH access from your IPs
   ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["147.235.180.110/32", "18.206.107.24/29"] # the first is my ip, the second is the aws range ips to connect through the session manager
+    cidr_blocks = ["147.235.180.110/32", "79.177.129.158/32"]
+  }
+
+  # SSH access for EC2 Instance Connect (AWS managed prefix list)
+  ingress {
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
+    prefix_list_ids = ["pl-0e4bcff02b13bef1e"] # EC2 Instance Connect for us-east-1
   }
 
   # Outbound Rules: Allow the server to talk to the internet 
