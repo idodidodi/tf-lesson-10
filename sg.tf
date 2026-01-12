@@ -8,12 +8,12 @@ resource "aws_security_group" "wordpress_sg" {
   vpc_id      = data.aws_vpc.default.id
 
 
-  # HTTP access from anywhere
+  # HTTP access from anywhere on port 80
   ingress {
-    from_port   = 8000
-    to_port     = 8000
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"]  # Or restrict to your IP: ["79.177.129.158/32"]
   }
 
   # HTTPS access from anywhere
