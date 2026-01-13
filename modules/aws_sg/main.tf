@@ -1,19 +1,14 @@
-data "aws_vpc" "default" {
-  default = true
-}
-
-resource "aws_security_group" "wordpress_sg" {
-  name        = "wordpress-server-sg"
+resource "aws_security_group" "this" {
+  name        = var.sg_name
   description = "Allow HTTP, HTTPS and SSH traffic"
-  vpc_id      = data.aws_vpc.default.id
-
+  vpc_id      = var.vpc_id
 
   # HTTP access from anywhere on port 80
   ingress {
     from_port   = 80
     to_port     = 80
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]  # Or restrict to your IP: ["79.177.129.158/32"]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   # HTTPS access from anywhere
@@ -29,10 +24,10 @@ resource "aws_security_group" "wordpress_sg" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = ["147.235.180.110/32", "79.177.129.158/32"]
+    cidr_blocks = var.allowed_ips
   }
 
-  # SSH access for EC2 Instance Connect (AWS managed prefix list)
+  # SSH access for EC2 Instance Connect
   ingress {
     from_port       = 22
     to_port         = 22
@@ -40,16 +35,15 @@ resource "aws_security_group" "wordpress_sg" {
     prefix_list_ids = ["pl-0e4bcff02b13bef1e"] # EC2 Instance Connect for us-east-1
   }
 
-  # Outbound Rules: Allow the server to talk to the internet 
-  # (Necessary for downloading WordPress updates and plugins)
+  # Outbound Rules
   egress {
     from_port   = 0
     to_port     = 0
-    protocol    = "-1" # "-1" means all protocols
+    protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "wordpress-sg"
+    Name = var.sg_name
   }
 }
